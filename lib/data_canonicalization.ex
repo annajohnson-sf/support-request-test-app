@@ -1,4 +1,8 @@
 defmodule DataCanonicalization do
+
+  alias SupportRequestApp.Repo
+  alias SupportRequests.SupportRequest
+
   @spec read_payload(map()) :: %{
           optional(:acceptance) => binary(),
           optional(:description) => binary(),
@@ -13,6 +17,8 @@ defmodule DataCanonicalization do
     |> List.first()
     |> Map.get("elements")
     |> canonicalize_data()
+    |> SupportRequest.changeset()
+    |> Repo.insert()
   end
 
   @spec canonicalize_data(list(map())) :: map()
